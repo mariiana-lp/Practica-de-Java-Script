@@ -25,10 +25,21 @@
         this.board = board;
         this.speed_y=0;
         this.speed_x=3;
+        this.direction = 1;
 
         board.ball = this;
         this.kind = "circulo";
+
+        
     }
+
+    self.Ball.prototype = {
+        move: function(){
+            this.x += (this.speed_x * this.direction);
+            this.y += (this.speed_y);
+        }
+    }
+
 })();
 
 //Dibujo de barras --video 2
@@ -82,6 +93,7 @@
         play: function(){
             this.clean();
             this.draw();
+            this.board.ball.move();
         }
     }
 
@@ -109,7 +121,9 @@ var board_view = new BoardView(canvas, board);
 var ball = new Ball(350, 100, 10, board);
 
 window.requestAnimationFrame(main);
-
+setTimeout(function(){
+    ball.direction = -1;
+},4000)
 document.addEventListener("keydown", function(ev){
     ev.preventDefault();    
     if (ev.keyCode === 38){
