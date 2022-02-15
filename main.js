@@ -11,9 +11,23 @@
     self.Board.prototype = {
         get elements(){
             var elements = this.bars;
-            //elements.push(this.ball);
+            elements.push(this.ball);
             return elements;
         }
+    }
+})();
+//Dibujo de pelota
+(function(){
+    self.Ball = function(x, y, radio, board){
+        this.x = x;
+        this.y = y;
+        this.radio = radio;
+        this.board = board;
+        this.speed_y=0;
+        this.speed_x=3;
+
+        board.ball = this;
+        this.kind = "circulo";
     }
 })();
 
@@ -63,6 +77,11 @@
 
                 draw(this.ctx, el);
             };
+        },
+
+        play: function(){
+            this.clean();
+            this.draw();
         }
     }
 
@@ -70,7 +89,14 @@
         switch(element.kind){
             case "rectangulo":
                 ctx.fillRect(element.x, element.y, element.width, element.height);
-                break
+                break;
+            case "circulo":
+                ctx.beginPath();
+                ctx.arc(element.x, element.y, element.radio, 0,7);
+                ctx.fill();
+                ctx.closePath();
+                break;
+
         }
     }
 })();
@@ -80,6 +106,7 @@ var bar = new Bar(20,100,40,100, board);
 var bar_2 = new Bar(735,100,40,100, board);
 var canvas = document.getElementById('canvas');
 var board_view = new BoardView(canvas, board);
+var ball = new Ball(350, 100, 10, board);
 
 window.requestAnimationFrame(main);
 
@@ -102,8 +129,7 @@ document.addEventListener("keydown", function(ev){
 window.addEventListener("load", main);
 
 function main(){
-    board_view.clean();
-    board_view.draw();
+    board_view.play();
     window.requestAnimationFrame(main);
 
 }
